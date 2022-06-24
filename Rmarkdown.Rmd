@@ -1,0 +1,62 @@
+---
+title: "Data Visualization"
+author: "Mohammed Abdul Bari"
+date: '2022-06-24'
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+```{r read_data,echo=TRUE}
+#reading data from github repository
+read_data <- read.csv(url("https://raw.githubusercontent.com/fivethirtyeight/police-settlements/main/atlanta_ga/final/atlanta_edited.csv"))
+
+```
+
+```{r data,include=FALSE}
+library(dplyr)
+#group data by calendar year
+
+data<-read_data %>%
+  group_by(calendar_year) %>% 
+  summarize(sum_calendar_year = sum(calendar_year))
+```
+
+```{r histogram,include=TRUE}
+
+#histogram showing Number of police misconduct incidences
+hist(data$sum_calendar_year, main ="Number of incidences per year",
+    xlab ="Number of incidences",
+    xlim =c(0,35000), col ="blue",
+    freq = FALSE)
+```
+
+```{r scatterplot,include=TRUE}
+# scatterplot visualization showing the Number of police misconduct incidences per year
+plot(data$calendar_year,data$sum_calendar_year,
+        main = 'Number of police misconduct incidences per year',
+        xlab ="year of incidence",
+        ylab ="Number of incidences")
+```
+
+```{r scatterplot2,include=TRUE}
+#scatterplot showing relationship between amount of money demanded to compensate police misconduct victims and amount awarded.
+plot(x = read_data$amount_awarded,
+     y = read_data$amount_demanded,
+     xlab = "amount awarded",
+     ylab = "amount demanded",
+     col = "green",
+     main = "amount awarded vs amount demanded")
+```
+
+```{r barchart,include=TRUE}
+#bar chart: Number of police misconduct incidences per year
+barplot(data$sum_calendar_year,
+        names.arg=data$calendar_year,
+        main = 'Number of police misconduct incidences per year',
+        xlab ="year of incidence",
+        ylab ="Number of incidences")
+```
